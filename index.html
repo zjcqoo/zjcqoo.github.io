@@ -5,23 +5,31 @@
   <meta charset="utf-8">
   <base target="_blank">
   <style>
+    body {
+      padding: 1em;
+    }
     #txtURL {
-      width: 300px;
+      width: 100%;
+      height: 2em;
+      font-size: 2em;
+      padding: 0.5em;
+      -webkit-appearance: none;
     }
   </style>
 </head>
 <body>
-  <h1>网页沙盒</h1>
+  <h1>Enter URL</h1>
   <div>
-    URL:
-    <input id="txtURL" value="https://www.google.com">
-    <button id="btnGo">Go</button>
+    <input id="txtURL" type="search" value="https://www.google.com" autofocus>
   </div>
   <script>
-    btnGo.onclick = function() {
-      var root = location.href.replace(/[^/]+$/, '')
-      open(root + '-----' + txtURL.value)
+    txtURL.onkeypress = function(e) {
+      if (e.keyCode === 13) {
+        var root = location.href.replace(/[^/]+$/, '')
+        open(root + '-----' + txtURL.value)
+      }
     }
+    txtURL.setSelectionRange(12, 18)
   </script>
 </body>
 </html>
