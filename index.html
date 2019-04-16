@@ -3,7 +3,6 @@
 <head>
   <title>Page Sandbox Demo</title>
   <meta charset="utf-8">
-  <base target="_blank">
   <style>
     body {
       padding: 1em;
@@ -26,7 +25,7 @@
     txtURL.onkeypress = function(e) {
       if (e.keyCode === 13) {
         var root = location.href.replace(/[^/]+$/, '')
-        open(root + '-----' + txtURL.value)
+        location = root + '-----' + txtURL.value
       }
     }
     txtURL.setSelectionRange(12, 18)
