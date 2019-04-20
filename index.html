@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Page Sandbox Demo</title>
+  <title>Page Sandbox</title>
   <meta charset="utf-8">
   <style>
     body {
@@ -11,24 +11,43 @@
       width: 100%;
       height: 2em;
       font-size: 2em;
-      padding: 0.5em;
-      -webkit-appearance: none;
+      padding: 0 0.5em;
+    }
+    #btnGo {
+      margin-top: 0.5em;
+      width: 100%;
+      height: 2em;
+      font-size: 2em;
     }
   </style>
 </head>
 <body>
-  <h1>Enter URL</h1>
   <div>
-    <input id="txtURL" type="search" value="https://www.google.com" autofocus>
+    <input id="txtURL" type="text" value="www.google.com" autofocus>
+  </div>
+  <div>
+    <button id="btnGo">Go</button>
   </div>
   <script>
     txtURL.onkeypress = function(e) {
       if (e.keyCode === 13) {
-        var root = location.href.replace(/[^/]+$/, '')
-        location = root + '-----' + txtURL.value
+        btnGo.onclick()
       }
     }
-    txtURL.setSelectionRange(12, 18)
+    btnGo.onclick = function() {
+      var url = txtURL.value.trim()
+      if (!/^https?:\/\//i.test(url)) {
+        if (/\.(com|cn|net|org|tv)$/.test(url)) {
+          url = 'https://' + url
+        } else {
+          url = 'https://www.google.com/search?q=' + encodeURIComponent(url)
+        }
+      }
+      btnGo.textContent = 'loading ...'
+      var root = location.href.replace(/[^/]+$/, '')
+      location = root + '-----' + url
+    }
+    txtURL.setSelectionRange(0, txtURL.value.length)
   </script>
 </body>
 </html>
