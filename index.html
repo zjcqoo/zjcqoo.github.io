@@ -7,48 +7,151 @@
     body {
       padding: 1em;
     }
+    .box {
+      margin-top: 1em;
+      font-size: 2em;
+    }
     #txtURL {
       width: 100%;
       height: 2em;
-      font-size: 2em;
+      font-size: 1em;
       text-indent: 0.5em;
       padding: 0;
     }
     #btnGo {
-      margin-top: 1em;
       width: 100%;
       height: 2em;
-      font-size: 2em;
+      font-size: 1em;
+    }
+    select {
+      font-size: 1em;
+    }
+    .desc {
+      font-size: 0.5em;
     }
   </style>
 </head>
 <body>
-  <div>
+  <div class="box">
     <input id="txtURL" type="text" value="www.google.com" autofocus>
   </div>
-  <div>
-    <button id="btnGo">Go</button>
+  <div class="box">
+    <button id="btnGo" disabled>初始化中...</button>
+  </div>
+  <div class="box">
+    <span>切换线路:</span>
+    <select id="selNode" disabled>
+      <option value="aliyun-hk">轻量云-香港（直连）</option>
+      <option value="aliyun-sg">轻量云-新加坡（直连）</option>
+      <option value="cf-aliyun-hk">轻量云-香港（CF 加速）</option>
+      <option value="cf-aliyun-sg">轻量云-新加坡（CF 加速）</option>
+    </select>
+    <span class="desc">线路切换实时生效，无需刷新页面</span>
   </div>
   <script>
+    var sw = navigator.serviceWorker
+    var swCtl
+
+    function main() {
+      if (!sw || !self.ReadableStream) {
+        txtURL.value = '浏览器版本过低，推荐使用最新版 Chrome 浏览器'
+        return
+      }
+      btnGo.disabled = false
+      btnGo.textContent = 'Go'
+
+      sw.getRegistration().then(function(reg) {
+      if (reg) {
+        onSwReady()
+      } else {
+        var root = location.href.split('-----')[0]
+        sw.register(root + 'x.js')
+          .then(onSwReady)
+          .catch(onSwFail)
+        }
+      })
+    }
+    main()
+
+    function getNavUrl(text) {
+      if (/^https?:\/\//i.test(text)) {
+        return text
+      }
+      var url
+      if (/\.(com|cn|net|org|tv)$/.test(text)) {
+        url = 'https://' + text
+      } else {
+        url = 'https://www.google.com/search?q=' + encodeURIComponent(text)
+      }
+      return url
+    }
+
+    function encUrl(url) {
+      var root = location.href.replace(/[^/]+$/, '')
+      return root + '-----' + url
+    }
+
+    function popup(url) {
+      var a = document.createElement('a')
+      a.target = '_blank'
+      a.rel = 'noopener'
+      a.href = url
+      a.click()
+    }
+
+    btnGo.onclick = function() {
+      var text = txtURL.value.trim()
+      var rawUrl = getNavUrl(text)
+      var navUrl = encUrl(rawUrl)
+      popup(navUrl)
+    }
     txtURL.onkeypress = function(e) {
       if (e.keyCode === 13) {
         btnGo.onclick()
       }
     }
-    btnGo.onclick = function() {
-      var url = txtURL.value.trim()
-      if (!/^https?:\/\//i.test(url)) {
-        if (/\.(com|cn|net|org|tv)$/.test(url)) {
-          url = 'https://' + url
-        } else {
-          url = 'https://www.google.com/search?q=' + encodeURIComponent(url)
-        }
-      }
-      btnGo.textContent = 'loading ...'
-      var root = location.href.replace(/[^/]+$/, '')
-      location = root + '-----' + url
-    }
     txtURL.setSelectionRange(0, txtURL.value.length)
+
+
+    function onSwReady() {
+      selNode.disabled = false
+
+      sw.addEventListener('message', function(e) {
+        var data = e.data
+        var cmd = data[0]
+        var msg = data[1]
+        if (cmd === 103) {
+          selNode
+            .querySelector('*[value=' + msg + ']')
+            .selected = true
+        }
+      })
+      sendMsgToSw(100)
+    }
+
+    function onSwFail(err) {
+      txtURL.value = err
+    }
+
+    selNode.onchange = function() {
+      var item = this.options[this.selectedIndex]
+      sendMsgToSw(102, item.value)
+    }
+
+    function sendMsgToSw(cmd, val) {
+      var ctl = sw.controller
+      if (!ctl) {
+        console.log('ctl is null')
+        return
+      }
+      ctl.postMessage([cmd, val])
+    }
   </script>
+
+  <!-- preload -->
+  <script>
+    self.NO_RUN = 1
+  </script>
+  <script src="x.js" async></script>
 </body>
 </html>
