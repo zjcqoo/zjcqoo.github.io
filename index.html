@@ -3,6 +3,7 @@
 <head>
   <title>Page Sandbox</title>
   <meta charset="utf-8">
+  <base target="_blank">
   <style>
     body {
       padding: 1em;
@@ -27,7 +28,10 @@
       font-size: 1em;
     }
     .desc {
-      font-size: 0.5em;
+      font-size: 0.7em;
+    }
+    #list a {
+      margin: 0.5em;
     }
   </style>
 </head>
@@ -46,7 +50,9 @@
       <option value="cf-aliyun-hk">轻量云-香港（CF 加速）</option>
       <option value="cf-aliyun-sg">轻量云-新加坡（CF 加速）</option>
     </select>
-    <span class="desc">线路切换实时生效，无需刷新页面</span>
+    <span class="desc">实时生效，无需刷新页面</span>
+  </div>
+  <div class="box" id="list">
   </div>
   <script>
     var sw = navigator.serviceWorker
@@ -94,7 +100,6 @@
 
     function popup(url) {
       var a = document.createElement('a')
-      a.target = '_blank'
       a.rel = 'noopener'
       a.href = url
       a.click()
@@ -146,6 +151,30 @@
         return
       }
       ctl.postMessage([cmd, val])
+    }
+
+    var sites = [
+      ['google', ''],
+      ['youtube', ''],
+      ['twitter', 'twitter.com/google'],
+      ['flickr', ''],
+      ['quora', 'www.quora.com/topic/JavaScript-programming-language'],
+      ['twitch', 'www.twitch.tv'],
+      ['reddit', ''],
+      ['wiki', 'zh.wikipedia.org'],
+      ['gist', 'gist.github.com'],
+      ['facebook', 'facebook.com/Google/'],
+      ['blogger', ''],
+    ]
+
+    window.onload = function() {
+      list.innerHTML = sites.map(function(arr) {
+        var id = arr[0]
+        var url = arr[1] || ('www.' + id + '.com')
+
+        return '<a href=/-----https://' + url + '>' +
+          '<img width=128 height=128 src=ico/' + id + '.png></a>'
+      }).join('')
     }
 
     main()
