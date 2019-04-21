@@ -16,11 +16,11 @@
       width: 100%;
       height: 2em;
       text-indent: 0.5em;
-      padding: 0;
+      padding: 0.25em 0;
     }
     #btnGo {
       width: 100%;
-      height: 2em;
+      height: 3em;
     }
     .desc {
       font-size: 0.5em;
@@ -56,6 +56,8 @@
     var swCtl
 
     function main() {
+      console.log('JsProxy v0.0.1 https://github.com/EtherDream/jsproxy/')
+
       if (!self.isSecureContext) {
         txtURL.value = '本程序需要 HTTPS 站点'
         return
