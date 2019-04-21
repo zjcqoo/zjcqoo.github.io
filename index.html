@@ -7,7 +7,7 @@
   <base target="_blank">
   <style>
     body {
-      padding: 0.5em;
+      padding: 0 0.5em;
     }
     .box {
       margin-top: 1em;
@@ -26,6 +26,9 @@
       font-size: 0.5em;
       margin-top: 0.5em;
       color: #666;
+    }
+    #list a {
+      margin: 1em;
     }
   </style>
 </head>
@@ -53,6 +56,10 @@
     var swCtl
 
     function main() {
+      if (!self.isSecureContext) {
+        txtURL.value = '本程序需要 HTTPS 站点'
+        return
+      }
       if (!sw || !self.ReadableStream) {
         txtURL.value = '浏览器版本过低，推荐使用最新版 Chrome 浏览器'
         return
