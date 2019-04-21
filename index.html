@@ -64,14 +64,16 @@
       if (reg) {
         onSwReady()
       } else {
-        var root = location.href.split('-----')[0]
-        sw.register(root + 'x.js')
+        sw.register(getRootPath() + 'x.js')
           .then(onSwReady)
           .catch(onSwFail)
         }
       })
     }
-    main()
+
+    function getRootPath() {
+      return location.href.replace(/[^/]+$/, '/')
+    }
 
     function getNavUrl(text) {
       if (/^https?:\/\//i.test(text)) {
@@ -87,8 +89,7 @@
     }
 
     function encUrl(url) {
-      var root = location.href.replace(/[^/]+$/, '')
-      return root + '-----' + url
+      return getRootPath() + '-----' + url
     }
 
     function popup(url) {
@@ -146,12 +147,8 @@
       }
       ctl.postMessage([cmd, val])
     }
-  </script>
 
-  <!-- preload -->
-  <script>
-    self.NO_RUN = 1
+    main()
   </script>
-  <script src="x.js" async></script>
 </body>
 </html>
