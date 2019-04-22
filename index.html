@@ -52,6 +52,10 @@
   <div class="box" id="list">
   </div>
   <script>
+    var PAGE_NODE_GET = 100
+    var PAGE_NODE_SWITCH = 102
+    var SW_NODE_SWITCHED = 103
+    var SW_READY = 200
     var sw = navigator.serviceWorker
     var swCtl
 
@@ -110,6 +114,10 @@
 
     btnGo.onclick = function() {
       var text = txtURL.value.trim()
+      if (text.indexOf('-----') >= 0) {
+        text = text.split('-----').pop()
+        txtURL.value = text
+      }
       var rawUrl = getNavUrl(text)
       var navUrl = encUrl(rawUrl)
       popup(navUrl)
@@ -129,13 +137,19 @@
         var data = e.data
         var cmd = data[0]
         var msg = data[1]
-        if (cmd === 103) {
+        switch (cmd) {
+        case SW_NODE_SWITCHED:
           selNode
             .querySelector('*[value=' + msg + ']')
             .selected = true
+          break
+        case SW_READY:
+          sendMsgToSw(PAGE_NODE_GET)
+          // preload
+          new Image().src = 'https://www.google.com/favicon.ico'
+          break
         }
       })
-      sendMsgToSw(100)
     }
 
     function onSwFail(err) {
@@ -144,7 +158,7 @@
 
     selNode.onchange = function() {
       var item = this.options[this.selectedIndex]
-      sendMsgToSw(102, item.value)
+      sendMsgToSw(PAGE_NODE_SWITCH, item.value)
     }
 
     function sendMsgToSw(cmd, val) {
