@@ -22,11 +22,6 @@
       width: 100%;
       font-size: 1.5em;
     }
-    #labelNode {
-      font-size: 0.5em;
-      margin-top: 0.5em;
-      color: #666;
-    }
     #list a {
       margin: 1em;
     }
@@ -47,7 +42,6 @@
       <option value="cf-aliyun-hk">轻量云-香港（CF 加速）</option>
       <option value="cf-aliyun-sg">轻量云-新加坡（CF 加速）</option>
     </select>
-    <div id="labelNode">&nbsp;</div>
   </div>
   <div class="box" id="list">
   </div>
@@ -158,7 +152,6 @@
     }
 
     selNode.onchange = function() {
-      labelNode.innerHTML = '立即生效，无需刷新页面'
       var item = this.options[this.selectedIndex]
       sendMsgToSw(PAGE_NODE_SWITCH, item.value)
     }
