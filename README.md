@@ -1,1 +1,1 @@
-临时测试。源码参见 https://github.com/EtherDream/jsproxy/
+该目录最终发布到 Web 服务器，或者 GitHub Pages，例如 https://zjcqoo.github.io
