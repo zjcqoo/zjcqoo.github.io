@@ -178,6 +178,9 @@
 
       Object.keys(nodeMap).forEach(id => {
         var info = nodeMap[id]
+        if (info.hidden) {
+          return
+        }
         var optEl = document.createElement('option')
 
         optEl.text = info.label
