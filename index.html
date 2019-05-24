@@ -1,1 +1,189 @@
-<!doctypehtml><html><head><title>Page Sandbox</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><base target=_blank><style>body{padding:0 .5em}.box{margin-top:1em}#txtURL{width:100%;height:2em;text-indent:.5em;padding:.25em 0}#btnGo{width:100%;font-size:1.5em}#list a{margin:1em}</style></head><body><div class=box><input id=txtURL value=www.google.com autofocus></div><div class=box><button id=btnGo disabled=disabled>初始化中...</button></div><div class=box>最近程序路径有较大调整，如有问题尝试清理本站的浏览器缓存，或者隐身模式访问</div><div class=box><span>切换线路:</span> <select id=selNode disabled=disabled><optgroup label=直连><option value=aliyun-hk>轻量云-香港</option><option value=aliyun-sg>轻量云-新加坡</option><option value=bwh-la>搬瓦工-洛杉矶</option><option value=justhost-moscow>JustHost-莫斯科</option><option value=justhost-novosibirsk>JustHost-新西伯利亚</option></optgroup><optgroup label="CF 代理"><option value=cf-aliyun-hk>轻量云-香港</option><option value=cf-aliyun-sg>轻量云-新加坡</option><option value=cf-bwh-la>搬瓦工-洛杉矶</option><option value=cf-justhost-moscow>JustHost-莫斯科</option><option value=cf-justhost-novosibirsk>JustHost-新西伯利亚</option></optgroup><optgroup label=测试><option value=local>localhost</option></optgroup></select></div><div class=box id=list></div><script>var i=100,c=102,a=103,r=200,n=navigator.serviceWorker;function s(){return location.pathname.replace(/\w+\.\w+$/,"").replace(/\/*$/,"/")}function e(){setTimeout(u,100),selNode.disabled=!1,n.addEventListener("message",function(t){var e=t.data,o=e[0],n=e[1];switch(o){case a:selNode.querySelector("*[value="+n+"]").selected=!0;break;case r:"#local"===location.hash?l(c,"local"):l(i),(new Image).src="https://www.google.com/favicon.ico"}})}function o(t){txtURL.value=t}function l(t,e){var o=n.controller;o?o.postMessage([t,e]):console.log("ctl is null")}btnGo.onclick=function(){var t=txtURL.value.trim();0<=t.indexOf("-----")&&(t=t.split("-----").pop(),txtURL.value=t);var e=function o(t){return s()+"-----"+t}(function n(t){return/^https?:\/\//i.test(t)?t:/\.(com|cn|net|org|tv)$/.test(t)?"https://"+t:"https://www.google.com/search?q="+encodeURIComponent(t)}(t));open(e).opener=null},txtURL.onkeypress=function(t){13===t.keyCode&&btnGo.onclick()},txtURL.setSelectionRange(0,txtURL.value.length),selNode.onchange=function(){var t=this.options[this.selectedIndex];l(c,t.value)};var t=[["google",""],["youtube",""],["twitter","twitter.com/google"],["flickr",""],["quora","www.quora.com/topic/JavaScript-programming-language"],["twitch","www.twitch.tv"],["reddit",""],["wiki","zh.wikipedia.org"],["gist","gist.github.com"],["facebook","facebook.com/Google/"],["blogger",""]];function u(){list.innerHTML=t.map(function(t){var e=t[0];return"<a rel=noopener href=/-----https://"+(t[1]||"www."+e+".com")+"><img width=128 height=128 src=assets/ico/"+e+".png></a>"}).join("")}!function g(){console.log("JsProxy v0.0.9 https://github.com/EtherDream/jsproxy/"),self.isSecureContext?n&&self.ReadableStream?(btnGo.disabled=!1,btnGo.textContent="Go",n.getRegistration().then(function(t){t?(e(),l(i)):n.register(s()+"sw.js").then(e)["catch"](o)})):txtURL.value="浏览器版本过低，推荐使用最新版 Chrome 浏览器":txtURL.value="本程序需要 HTTPS 站点"}()</script></body></html>
+<!doctypehtml><html><head><title>Page Sandbox</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><base target=_blank><style>body{padding:0 .5em}.box{margin-top:1em}#txtURL{width:100%;height:2em;text-indent:.5em;padding:.25em 0}#btnGo{width:100%;font-size:1.5em}#list a{margin:1em}</style></head><body><div class=box><input id=txtURL value=www.google.com autofocus></div><div class=box><button id=btnGo disabled=disabled>初始化中...</button></div><div class=box>最近程序路径有较大调整，如有问题尝试清理本站的浏览器缓存，或者隐身模式访问</div><div class=box><span>切换线路:</span> <select id=selNode disabled=disabled></select></div><div class=box id=list></div><script>var PAGE_NODE_GET = 100
+    var PAGE_NODE_SWITCH = 102
+    var SW_NODE_SWITCHED = 103
+    var SW_READY = 200
+    var sw = navigator.serviceWorker
+    var swCtl = null
+
+    var testNodeId = ''
+
+    function parseTestNode() {
+      var m = location.hash.match(/test=([\w.]+)/)
+      if (!m) {
+        return
+      }
+      var ip = m[1]
+      testNodeId = 'test-' + ip.replace(/\./g, '-')
+
+      optTestNode.value = testNodeId
+      optTestNode.text = ip
+      optTestNode.hidden = false
+      optTestNode.selected = true
+    }
+
+    function initSw() {
+      sw.getRegistration().then(function(reg) {
+      if (reg) {
+        onSwReady()
+        sendMsgToSw(PAGE_NODE_GET)
+      } else {
+        sw.register(getRootPath() + 'sw.js')
+          .then(onSwReady)
+          .catch(onSwFail)
+        }
+      })
+    }
+
+    function main() {
+      console.log('JsProxy v0.0.9 https://github.com/EtherDream/jsproxy/')
+
+      if (!self.isSecureContext) {
+        txtURL.value = '本程序需要 HTTPS 站点'
+        return
+      }
+      if (!sw || !self.ReadableStream) {
+        txtURL.value = '浏览器版本过低，推荐使用最新版 Chrome 浏览器'
+        return
+      }
+      btnGo.disabled = false
+      btnGo.textContent = 'Go'
+
+      parseTestNode()
+    }
+
+    function getRootPath() {
+      // https://a.com/ -> /
+      // https://a.com/index.html -> /
+      // https://a.com/index.php -> /
+      // https://a.com/path/to/ -> /path/to/
+      // https://a.com/path/to -> /path/to/
+      // https://a.com/path/to/index.html -> /path/to/
+      return location.pathname
+        .replace(/\w+\.\w+$/, '')
+        .replace(/\/*$/, '/')
+    }
+
+    function getNavUrl(text) {
+      if (/^https?:\/\//i.test(text)) {
+        return text
+      }
+      var url
+      if (/\.(com|cn|net|org|tv)$/.test(text)) {
+        url = 'https://' + text
+      } else {
+        url = 'https://www.google.com/search?q=' + encodeURIComponent(text)
+      }
+      return url
+    }
+
+    function encUrl(url) {
+      return getRootPath() + '-----' + url
+    }
+
+    btnGo.onclick = function() {
+      var text = txtURL.value.trim()
+      if (text.indexOf('-----') >= 0) {
+        text = text.split('-----').pop()
+        txtURL.value = text
+      }
+      var rawUrl = getNavUrl(text)
+      var navUrl = encUrl(rawUrl)
+      var win = open(navUrl)
+      win.opener = null
+    }
+    txtURL.onkeypress = function(e) {
+      if (e.keyCode === 13) {
+        btnGo.onclick()
+      }
+    }
+    txtURL.setSelectionRange(0, txtURL.value.length)
+
+    function onNodeChange(id) {
+      var path = '*[value=' + id + ']'
+      var item = selNode.querySelector(path)
+      item.selected = true
+      item.hidden = false
+    }
+
+    function onSwReady() {
+      setTimeout(showIcons, 100)
+      selNode.disabled = false
+      sw.addEventListener('message', onSwMsg)
+    }
+
+    function onSwMsg(e) {
+      var data = e.data
+      var cmd = data[0]
+      var msg = data[1]
+      switch (cmd) {
+      case SW_NODE_SWITCHED:
+        onNodeChange(msg)
+        break
+      case SW_READY:
+        if (testNodeId) {
+          sendMsgToSw(PAGE_NODE_SWITCH, testNodeId)
+        } else {
+          sendMsgToSw(PAGE_NODE_GET)
+        }
+        break
+      }
+    }
+
+    function onSwFail(err) {
+      txtURL.value = err
+    }
+
+    selNode.onchange = function() {
+      var item = this.options[this.selectedIndex]
+      sendMsgToSw(PAGE_NODE_SWITCH, item.value)
+    }
+
+    function sendMsgToSw(cmd, val) {
+      var ctl = sw.controller
+      if (!ctl) {
+        console.log('ctl is null')
+        return
+      }
+      ctl.postMessage([cmd, val])
+    }
+
+    var sites = [
+      ['google', ''],
+      ['youtube', ''],
+      ['twitter', 'twitter.com/google'],
+      ['flickr', ''],
+      ['quora', 'www.quora.com/topic/JavaScript-programming-language'],
+      ['twitch', 'www.twitch.tv'],
+      ['reddit', ''],
+      ['wiki', 'zh.wikipedia.org'],
+      ['gist', 'gist.github.com'],
+      ['facebook', 'facebook.com/Google/'],
+      ['blogger', '']
+    ]
+
+    function showIcons() {
+      list.innerHTML = sites.map(function(arr) {
+        var id = arr[0]
+        var url = arr[1] || ('www.' + id + '.com')
+
+        return '<a rel=noopener href=/-----https://' + url + '>' +
+          '<img width=128 height=128 src=assets/ico/' + id + '.png></a>'
+      }).join('')
+    }
+
+    function jsproxy_config(conf) {
+      initSw()
+
+      var nodeMap = conf.node_map
+
+      Object.keys(nodeMap).forEach(id => {
+        var info = nodeMap[id]
+        var optEl = document.createElement('option')
+
+        optEl.text = info.label
+        optEl.value = id
+        selNode.appendChild(optEl)
+      })
+    }
+
+    main()</script><script src=conf.js></script></body></html>
