@@ -24,6 +24,12 @@ jsproxy_config({
         'node-bwh-la.etherdream.com:8443'
       ]
     },
+    'justhost-msk': {
+      label: 'JustHost-莫斯科',
+      lines: [
+        '46.17.43.22.xip.io:8443'
+      ]
+    },
     'cfworker': {
       label: 'Cloudflare Worker',
       hidden: true,
