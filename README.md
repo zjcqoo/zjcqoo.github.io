@@ -1,5 +1,1 @@
-该仓库为 https://jsproxy-test.tk 提供静态文件服务
-
-后端源码：https://github.com/EtherDream/jsproxy
-
-前端源码：https://github.com/EtherDream/jsproxy-browser
+该目录最终发布到 Web 服务器，或者 GitHub Pages，例如 https://zjcqoo.github.io
