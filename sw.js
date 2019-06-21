@@ -1,1 +1,1 @@
-jsproxy_config=x=>importScripts(__FILE__=x.assets_cdn+'bundle.d8cdf274.js');importScripts('conf.js')
+jsproxy_config=x=>{__CONF__=x;importScripts(__FILE__=x.assets_cdn+'bundle.03a61bde.js')};importScripts('conf.js')
