@@ -4,7 +4,7 @@ jsproxy_config({
 
   static_boost: {
     enable: true,
-    ver: 5
+    ver: 7
   },
 
   // 节点配置
