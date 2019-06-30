@@ -1,6 +1,6 @@
 jsproxy_config({
   // 当前配置的版本（记录在日志中，用于排查问题）
-  ver: '67',
+  ver: '66',
 
   static_boost: {
     enable: true,
@@ -14,8 +14,8 @@ jsproxy_config({
       lines: [
         // 多条线路，负载均衡系统会从其中选一条
         'aliyun-hk-3.etherdream.com:8443',
-        // 'node-aliyun-hk-1.etherdream.com:8443',
-        // 'node-aliyun-hk-2.etherdream.com:8443',
+        'node-aliyun-hk-1.etherdream.com:8443',
+        'node-aliyun-hk-2.etherdream.com:8443',
       ]
     },
     'aliyun-sg': {
