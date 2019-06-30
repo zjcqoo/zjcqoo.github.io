@@ -1,6 +1,6 @@
 jsproxy_config({
   // 当前配置的版本（记录在日志中，用于排查问题）
-  ver: '60',
+  ver: '61',
 
   static_boost: {
     enable: true,
@@ -37,7 +37,7 @@ jsproxy_config({
       hidden: true,
       lines: [
         // 实验中...
-        'node-cfworker.etherdream.com:8443'
+        'shrill-unit-8594.jsproxy.workers.dev',
       ]
     }
   },
