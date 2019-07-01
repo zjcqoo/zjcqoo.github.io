@@ -1,10 +1,10 @@
 jsproxy_config({
   // 当前配置的版本（记录在日志中，用于排查问题）
-  ver: '66',
+  ver: '68',
 
   static_boost: {
     enable: true,
-    ver: 14
+    ver: 17
   },
 
   // 节点配置
@@ -33,14 +33,16 @@ jsproxy_config({
       ]
     },
     'cfworker': {
-      label: 'Cloudflare Worker',
+      label: '',
       hidden: true,
       lines: [
         // 实验中...
-        // 'a.jsproxy.workers.dev',
+        'shrill-unit-8594.jsproxy.workers.dev',
         'a.007.workers.dev',
         'a.hehe.workers.dev',
         'a.lulu.workers.dev',
+        'a.gugu.workers.dev',
+
       ]
     }
   },
