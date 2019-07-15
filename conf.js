@@ -1,11 +1,11 @@
 jsproxy_config({
   // 当前配置的版本（记录在日志中，用于排查问题）
-  ver: '90',
+  ver: '91',
 
   // 通过 CDN 加速常用网站的静态资源（实验中）
   static_boost: {
     enable: true,
-    ver: 36
+    ver: 38
   },
 
   // 节点配置
@@ -15,8 +15,8 @@ jsproxy_config({
       lines: {
         // 主机:权重
         'node-aliyun-hk-0.etherdream.com:8443': 1,
-        'node-aliyun-hk-3.etherdream.com:8443': 2,
-        'node-aliyun-hk-4.etherdream.com:8443': 2,
+        'node-aliyun-hk-3.etherdream.com:8443': 1,
+        'node-aliyun-hk-4.etherdream.com:8443': 1,
       }
     },
     'demo-sg': {
