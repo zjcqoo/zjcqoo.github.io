@@ -15,8 +15,8 @@ jsproxy_config({
       lines: {
         // 主机:权重
         'node-aliyun-hk-0.etherdream.com:8443': 1,
-        'node-aliyun-hk-3.etherdream.com:8443': 1,
-        'node-aliyun-hk-4.etherdream.com:8443': 1,
+        'node-aliyun-hk-1.etherdream.com:8443': 1,
+        'node-aliyun-hk-2.etherdream.com:8443': 1,
       }
     },
     'demo-sg': {
@@ -37,7 +37,7 @@ jsproxy_config({
       hidden: true,
       lines: {
         // 收费版（高权重）
-        'node-cfworker.etherdream.com': 4,
+        'node-cfworker.etherdream.com': 6,
 
         // 免费版（低权重，分摊一些成本）
         // 每个账号每天 10 万次免费请求，但有频率限制
