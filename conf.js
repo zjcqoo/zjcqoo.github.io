@@ -53,7 +53,7 @@ jsproxy_config({
    * 默认节点
    */
   // node_default: 'mysite',
-  node_default: /jsproxy\.\w+$/.test(location.host) ? 'demo-hk' : 'mysite',
+  node_default: /(\.github\.io|jsproxy\.\w+)$/.test(location.host) ? 'demo-hk' : 'mysite',
 
   /**
    * 加速节点
