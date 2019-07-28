@@ -56,11 +56,17 @@
     sw.addEventListener('message', onSwMsg)
     sendMsgToSw(PAGE_READY_CHECK)
 
+    function popup(url) {
+      const link = document.createElement('a')
+      link.rel = 'noopener noreferrer'
+      link.href = url
+      link.click()
+    }
+
     btnGo.onclick = function() {
       const text = txtURL.value.trim()
       if (text) {
-        const url = './-----' + text
-        open(url, '_blank', 'noopener,noreferrer')
+        popup('./-----' + text)
       }
     }
     txtURL.onkeypress = function(e) {
