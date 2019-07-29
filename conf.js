@@ -2,12 +2,12 @@ jsproxy_config({
   // 当前配置的版本（记录在日志中，用于排查问题）
   // 每次修改配置，该值需要增加，否则不会生效。
   // 默认每隔 5 分钟自动下载配置，若想立即验证，可通过隐私模式访问。
-  ver: '111',
+  ver: '112',
 
   // 通过 CDN 加速常用网站的静态资源（实验中）
   static_boost: {
     enable: true,
-    ver: 64
+    ver: 65
   },
 
   // 节点配置
@@ -16,8 +16,9 @@ jsproxy_config({
       label: '演示服务-香港节点',
       lines: {
         // 主机:权重
+        'node-aliyun-hk-0.etherdream.com:8443': 1,
         'node-aliyun-hk-1.etherdream.com:8443': 1,
-        'node-aliyun-hk-2.etherdream.com:8443': 2,
+        'node-aliyun-hk-2.etherdream.com:8443': 1,
       }
     },
     'demo-sg': {
